@@ -34,6 +34,9 @@ module MultiTenantTodo
         controller_specs: false,
         request_specs: true
       g.fixture_replacement :factory_bot, dir: "spec/factories"
+      # Configure ViewComponent to use RSpec for test generation
+      g.component_specs true
     end
+
   end
 end
