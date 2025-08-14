@@ -25,8 +25,8 @@ development:
   database: multi_tenant_todo_development
   host: localhost
   port: 5555
-  username: user
-  password: pass
+  username: multi_tenant_app
+  password: password
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -63,8 +63,8 @@ test:
   database: multi_tenant_todo_test
   host: localhost
   port: 5555
-  username: user
-  password: pass
+  username: multi_tenant_app
+  password: password
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
