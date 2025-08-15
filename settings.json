@@ -1,0 +1,8 @@
+{
+  "hooks": {
+    "PostToolUse": {
+      "Edit": "bundle exec rubocop --auto-correct {file_path}",
+      "MultiEdit": "bundle exec rubocop --auto-correct {file_path}"
+    }
+  }
+}
