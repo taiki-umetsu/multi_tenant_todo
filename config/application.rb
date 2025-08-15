@@ -37,6 +37,5 @@ module MultiTenantTodo
       # Configure ViewComponent to use RSpec for test generation
       g.component_specs true
     end
-
   end
 end
