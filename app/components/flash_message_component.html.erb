@@ -1,0 +1,11 @@
+<% if @flash[:notice] %>
+  <div class="<%= notice_classes %>" data-turbo-temporary>
+    <%= @flash[:notice] %>
+  </div>
+<% end %>
+
+<% if @flash[:alert] %>
+  <div class="<%= alert_classes %>" data-turbo-temporary>
+    <%= @flash[:alert] %>
+  </div>
+<% end %>

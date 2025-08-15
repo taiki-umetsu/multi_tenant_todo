@@ -23,6 +23,7 @@
   </head>
 
   <body>
+    <%= render FlashMessageComponent.new(flash: flash) %>
     <%= yield %>
   </body>
 </html>

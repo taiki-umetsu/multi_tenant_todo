@@ -8,8 +8,8 @@ class AddRlsPoliciesToUsers < ActiveRecord::Migration[8.0]
     execute <<~SQL
       CREATE POLICY users_tenant_isolation ON users
         FOR ALL
-        USING (tenant_id = current_setting('app.current_tenant', true)::uuid)
-        WITH CHECK (tenant_id = current_setting('app.current_tenant', true)::uuid);
+        USING (tenant_id = (nullif(current_setting('app.current_tenant', true), ''))::uuid)
+        WITH CHECK (tenant_id = (nullif(current_setting('app.current_tenant', true), ''))::uuid);
     SQL
 
     # ログイン前：メール一致だけ SELECT 許可（未設定ならNULL→false）

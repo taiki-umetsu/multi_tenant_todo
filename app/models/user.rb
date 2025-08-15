@@ -4,7 +4,8 @@ class User < ApplicationRecord
   encrypts :email, deterministic: true
   has_secure_password
   enum :role, { member: 0, admin: 1 }
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { scope: :tenant_id }
+  validates :password, presence: true, length: { minimum: 6 }, on: :create
   validates :role, presence: true
 
   class << self
@@ -15,9 +16,9 @@ class User < ApplicationRecord
       end
     end
 
-    def create_with_tenant(tenant_id, attributes)
+    def create_with_tenant!(tenant_id, attributes)
       with_tenant(tenant_id) do
-        create(attributes)
+        create!(tenant_id: tenant_id, **attributes)
       end
     end
   end
