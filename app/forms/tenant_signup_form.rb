@@ -9,9 +9,8 @@ class TenantSignupForm
 
   validates :tenant_name, presence: true
   validates :user_email, presence: true, email: true
-  validates :user_password, presence: true, length: { minimum: 6 }
+  validates :user_password, presence: true, password: true, confirmation: true
   validates :user_password_confirmation, presence: true
-  validate :password_confirmation_matches
 
   def save
     return false unless valid?
@@ -47,13 +46,6 @@ class TenantSignupForm
       password: user_password,
       role: :admin
     })
-  end
-
-  def password_confirmation_matches
-    return unless user_password.present? && user_password_confirmation.present?
-    return if user_password == user_password_confirmation
-
-    errors.add(:user_password_confirmation, "パスワードが一致しません")
   end
 
   def handle_record_errors(record)

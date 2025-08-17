@@ -5,7 +5,7 @@ class User < ApplicationRecord
   has_secure_password
   enum :role, { member: 0, admin: 1 }
   validates :email, presence: true, email: true, uniqueness: { scope: :tenant_id }
-  validates :password, presence: true, length: { minimum: 6 }, on: :create
+  validates :password, presence: true, password: true, on: :create
   validates :role, presence: true
 
   class << self

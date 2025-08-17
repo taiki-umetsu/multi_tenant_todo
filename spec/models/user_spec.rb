@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   let(:tenant) { create(:tenant) }
-  
+
   describe 'associations' do
     it 'belongs to tenant' do
       user = User.create_with_tenant!(tenant.id, {
-        email: 'test@example.com', 
-        password: 'password123', 
+        email: 'test@example.com',
+        password: 'password123',
         role: :member
       })
       expect(user.tenant).to eq(tenant)
@@ -22,20 +22,20 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
       expect(user.errors[:email]).to include("入力してください")
     end
-    
+
     it 'validates email uniqueness within tenant scope' do
       # 最初のユーザーを作成
       User.create_with_tenant!(tenant.id, {
-        email: 'test@example.com', 
-        password: 'password123', 
+        email: 'test@example.com',
+        password: 'password123',
         role: :member
       })
-      
+
       # 同じテナント内で同じメールアドレスのユーザーは作成できない
       duplicate_user = User.with_tenant(tenant.id) do
         User.new(tenant: tenant, email: 'test@example.com', password: 'password123', role: :member)
       end
-      
+
       expect(duplicate_user).not_to be_valid
       expect(duplicate_user.errors[:email]).to include('すでに存在します')
     end
@@ -47,7 +47,7 @@ RSpec.describe User, type: :model do
       expect(user).not_to be_valid
       expect(user.errors[:role]).to include("入力してください")
     end
-    
+
     it 'validates email format' do
       user = User.with_tenant(tenant.id) do
         User.new(tenant: tenant, email: 'invalid-email', password: 'password123', role: :member)
@@ -56,12 +56,12 @@ RSpec.describe User, type: :model do
       expect(user.errors[:email]).to include('形式が正しくありません')
     end
 
-    it 'validates password length on create' do
+    it 'validates password format on create' do
       user = User.with_tenant(tenant.id) do
         User.new(tenant: tenant, email: 'test@example.com', password: 'short', role: :member)
       end
       expect(user).not_to be_valid
-      expect(user.errors[:password]).to include('6文字以上で入力してください')
+      expect(user.errors[:password]).to include('形式が正しくありません')
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe User, type: :model do
     let(:user) do
       User.create_with_tenant!(tenant.id, {
         email: 'test@example.com',
-        password: 'test123',
+        password: 'password123',
         role: :member
       })
     end
@@ -83,7 +83,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'authenticates with correct password' do
-      expect(user.authenticate('test123')).to eq(user)
+      expect(user.authenticate('password123')).to eq(user)
     end
 
     it 'does not authenticate with wrong password' do
