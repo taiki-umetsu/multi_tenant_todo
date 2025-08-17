@@ -8,7 +8,7 @@ class TenantSignupForm
   attribute :user_password_confirmation, :string
 
   validates :tenant_name, presence: true
-  validates :user_email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :user_email, presence: true, email: true
   validates :user_password, presence: true, length: { minimum: 6 }
   validates :user_password_confirmation, presence: true
   validate :password_confirmation_matches

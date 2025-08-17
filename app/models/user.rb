@@ -4,7 +4,7 @@ class User < ApplicationRecord
   encrypts :email, deterministic: true
   has_secure_password
   enum :role, { member: 0, admin: 1 }
-  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { scope: :tenant_id }
+  validates :email, presence: true, email: true, uniqueness: { scope: :tenant_id }
   validates :password, presence: true, length: { minimum: 6 }, on: :create
   validates :role, presence: true
 
