@@ -14,12 +14,20 @@ RSpec.describe TenantSignupForm, type: :model do
     end
 
     it { should validate_presence_of(:tenant_name) }
+    it { should validate_length_of(:tenant_name).is_at_most(Tenant::NAME_MAX_LENGTH) }
     it { should validate_presence_of(:user_password_confirmation) }
 
     it 'validates password confirmation matches' do
       subject.user_password_confirmation = 'different'
       expect(subject).not_to be_valid
       expect(subject.errors[:user_password_confirmation]).to include('パスワードが一致しません')
+    end
+
+    it 'validates tenant name length exceeds maximum' do
+      long_name = "a" * (Tenant::NAME_MAX_LENGTH + 1)
+      subject.tenant_name = long_name
+      expect(subject).not_to be_valid
+      expect(subject.errors[:tenant_name]).to include("#{Tenant::NAME_MAX_LENGTH}文字以内で入力してください")
     end
   end
 

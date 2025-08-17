@@ -1,7 +1,9 @@
 class Tenant < ApplicationRecord
   has_many :users, dependent: :destroy
 
-  validates :name, presence: true, uniqueness: true
+  NAME_MAX_LENGTH = 100
+
+  validates :name, presence: true, uniqueness: true, length: { maximum: NAME_MAX_LENGTH }
 
   class << self
     def with_signup_phase(&block)

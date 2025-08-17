@@ -3,10 +3,18 @@ require 'rails_helper'
 RSpec.describe Tenant, type: :model do
   describe "validations" do
     it { should validate_presence_of(:name) }
+    it { should validate_length_of(:name).is_at_most(Tenant::NAME_MAX_LENGTH) }
 
     it "validates uniqueness of name" do
       Tenant.create_with_signup(name: "Existing Tenant")
       expect(build(:tenant, name: "Existing Tenant")).not_to be_valid
+    end
+
+    it "validates name length exceeds maximum" do
+      long_name = "a" * (Tenant::NAME_MAX_LENGTH + 1)
+      tenant = build(:tenant, name: long_name)
+      expect(tenant).not_to be_valid
+      expect(tenant.errors[:name]).to include("#{Tenant::NAME_MAX_LENGTH}文字以内で入力してください")
     end
   end
 

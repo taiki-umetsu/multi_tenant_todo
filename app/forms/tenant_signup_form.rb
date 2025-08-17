@@ -7,7 +7,7 @@ class TenantSignupForm
   attribute :user_password, :string
   attribute :user_password_confirmation, :string
 
-  validates :tenant_name, presence: true
+  validates :tenant_name, presence: true, length: { maximum: Tenant::NAME_MAX_LENGTH }
   validates :user_email, presence: true, email: true
   validates :user_password, presence: true, password: true, confirmation: true
   validates :user_password_confirmation, presence: true

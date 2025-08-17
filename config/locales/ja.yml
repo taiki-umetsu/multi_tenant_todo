@@ -4,6 +4,7 @@ ja:
       messages:
         blank: "入力してください"
         too_short: "%{count}文字以上で入力してください"
+        too_long: "%{count}文字以内で入力してください"
         invalid: "形式が正しくありません"
         taken: "すでに存在します"
     attributes:
@@ -19,5 +20,6 @@ ja:
       messages:
         blank: "入力してください"
         too_short: "%{count}文字以上で入力してください"
+        too_long: "%{count}文字以内で入力してください"
         invalid: "形式が正しくありません"
         confirmation: "パスワードが一致しません"
