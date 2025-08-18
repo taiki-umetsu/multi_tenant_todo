@@ -7,14 +7,16 @@ RSpec.describe 'テナント新規作成画面', type: :system do
 
   describe 'テナント作成フォーム' do
     it 'テナントと管理ユーザーを正常に作成できる' do
-      visit root_path
+      visit new_tenant_path
 
       expect(page).to have_content 'テナント作成'
 
-      fill_in 'テナント名', with: 'Test Company'
-      fill_in '管理者メールアドレス', with: 'admin@test.com'
-      fill_in '管理者パスワード', with: 'password123'
-      fill_in '管理者パスワード確認', with: 'password123'
+      within('form') do
+        fill_in 'テナント名', with: 'Test Company'
+        fill_in '管理者メールアドレス', with: 'admin@test.com'
+        fill_in '管理者パスワード', with: 'password123'
+        fill_in '管理者パスワード確認', with: 'password123'
+      end
 
       # テナントとユーザーの作成をチェック
       expect {
@@ -42,7 +44,7 @@ RSpec.describe 'テナント新規作成画面', type: :system do
     end
 
     it 'バリデーションエラーが表示される' do
-      visit root_path
+      visit new_tenant_path
 
       click_button 'テナントを作成'
 
@@ -51,12 +53,14 @@ RSpec.describe 'テナント新規作成画面', type: :system do
     end
 
     it 'パスワード不一致エラーが表示される' do
-      visit root_path
+      visit new_tenant_path
 
-      fill_in 'テナント名', with: 'Test Company'
-      fill_in '管理者メールアドレス', with: 'admin@test.com'
-      fill_in '管理者パスワード', with: 'password123'
-      fill_in '管理者パスワード確認', with: 'different'
+      within('form') do
+        fill_in 'テナント名', with: 'Test Company'
+        fill_in '管理者メールアドレス', with: 'admin@test.com'
+        fill_in '管理者パスワード', with: 'password123'
+        fill_in '管理者パスワード確認', with: 'different'
+      end
 
       click_button 'テナントを作成'
 
@@ -65,12 +69,14 @@ RSpec.describe 'テナント新規作成画面', type: :system do
     end
 
     it 'メールアドレス形式エラーが表示される' do
-      visit root_path
+      visit new_tenant_path
 
-      fill_in 'テナント名', with: 'Test Company'
-      fill_in '管理者メールアドレス', with: 'invalid-email'
-      fill_in '管理者パスワード', with: 'password123'
-      fill_in '管理者パスワード確認', with: 'password123'
+      within('form') do
+        fill_in 'テナント名', with: 'Test Company'
+        fill_in '管理者メールアドレス', with: 'invalid-email'
+        fill_in '管理者パスワード', with: 'password123'
+        fill_in '管理者パスワード確認', with: 'password123'
+      end
 
       click_button 'テナントを作成'
 

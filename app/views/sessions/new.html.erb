@@ -1,0 +1,20 @@
+<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold mb-6">ログイン</h2>
+
+  <%= form_with model: @form, url: login_path, method: :post, class: "space-y-4" do |f| %>
+    <%= render FormFieldComponent.new(form: f, field_name: :tenant_name, label_text: "テナント名", field_type: :text_field) %>
+
+    <%= render FormFieldComponent.new(form: f, field_name: :email, label_text: "メールアドレス", field_type: :email_field) %>
+
+    <%= render FormFieldComponent.new(form: f, field_name: :password, label_text: "パスワード", field_type: :password_field) %>
+
+    <%= render SubmitButtonComponent.new(text: "ログイン", disable_with: "ログイン中...") %>
+  <% end %>
+
+  <div class="mt-4 text-center">
+    <p class="text-sm text-gray-600">
+      アカウントをお持ちでない場合は
+      <%= link_to "テナント作成", new_tenant_path, class: "text-indigo-600 hover:text-indigo-500" %>
+    </p>
+  </div>
+</div>

@@ -9,7 +9,15 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Authentication
+  get "login", to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy", as: :logout
+
+  # Home
+  get "home", to: "home#index"
+
   # Tenant signup
   resources :tenants, only: [ :new, :create ]
-  root "tenants#new"
+  root "home#index"
 end

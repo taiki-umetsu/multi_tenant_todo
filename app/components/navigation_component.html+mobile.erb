@@ -1,0 +1,44 @@
+<div data-controller="mobile-menu" class="relative">
+  <nav class="bg-white shadow-md border-b border-gray-300">
+    <div class="px-4">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center">
+          <%= link_to root_path, class: "text-lg font-bold text-indigo-600 hover:text-indigo-700" do %>
+            Multi Tenant Todo
+          <% end %>
+        </div>
+
+        <div class="flex items-center relative">
+          <button type="button"
+                  class="text-gray-700 p-2 border-0 bg-transparent"
+                  data-action="click->mobile-menu#toggle">
+            <div class="w-6 h-6 flex flex-col justify-center items-center space-y-1">
+              <span class="block w-5 h-0.5 bg-gray-700"></span>
+              <span class="block w-5 h-0.5 bg-gray-700"></span>
+              <span class="block w-5 h-0.5 bg-gray-700"></span>
+            </div>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div class="hidden absolute right-0 top-full mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50" data-mobile-menu-target="menu">
+            <div class="px-4 py-3 space-y-3">
+              <% if logged_in? %>
+                <div class="py-2 rounded-md">
+                  <div class="text-sm font-medium text-gray-900"><%= @current_tenant.name %></div>
+                  <div class="text-xs text-gray-600"><%= @current_user.email %></div>
+                </div>
+                <%= button_to "ログアウト", logout_path, method: :delete,
+                    class: "block w-full text-center py-2 rounded-md text-sm font-medium text-gray-900 bg-white hover:bg-gray-50 border border-gray-300" %>
+              <% else %>
+                <%= link_to "ログイン", login_path,
+                    class: "block w-full text-center py-2 rounded-md text-sm font-medium text-gray-900 bg-white hover:bg-gray-50 border border-gray-300" %>
+                <%= link_to "テナント作成", new_tenant_path,
+                    class: "block w-full text-center py-2 rounded-md text-sm font-medium text-gray-900 bg-white hover:bg-gray-50 border border-gray-300 mt-2" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
