@@ -2,12 +2,14 @@ require 'rails_helper'
 
 RSpec.describe FormFieldComponent, type: :component do
   describe 'rendering' do
-    it 'renders text field with label' do
+    it 'renders text field with label and hint' do
       render_preview(:with_text_field)
 
       expect(page).to have_content("テナント名")
       expect(page).to have_css('label', text: "テナント名")
       expect(page).to have_css('input[type="text"][name*="tenant_name"]')
+      expect(page).to have_content("#{Tenant::NAME_MAX_LENGTH}文字以内で入力してください")
+      expect(page).to have_css('span.text-gray-400', text: "#{Tenant::NAME_MAX_LENGTH}文字以内で入力してください")
     end
 
     it 'renders email field with label' do
@@ -18,12 +20,14 @@ RSpec.describe FormFieldComponent, type: :component do
       expect(page).to have_css('input[type="email"][name*="user_email"]')
     end
 
-    it 'renders password field with label' do
+    it 'renders password field with label and hint' do
       render_preview(:with_password_field)
 
       expect(page).to have_content("パスワード")
       expect(page).to have_css('label', text: "パスワード")
       expect(page).to have_css('input[type="password"][name*="user_password"]')
+      expect(page).to have_content("#{PasswordValidator::MIN_LENGTH}文字以上#{PasswordValidator::MAX_LENGTH}文字以内で入力してください")
+      expect(page).to have_css('span.text-gray-400')
     end
 
     it 'renders field with validation errors' do

@@ -2,11 +2,13 @@
   <h2 class="text-2xl font-bold mb-6">テナント作成</h2>
 
   <%= form_with model: @form, url: tenants_path, method: :post, class: "space-y-4" do |f| %>
-    <%= render FormFieldComponent.new(form: f, field_name: :tenant_name, label_text: "テナント名", field_type: :text_field) %>
+    <%= render FormFieldComponent.new(form: f, field_name: :tenant_name, label_text: "テナント名", field_type: :text_field,
+                                      hint: "~#{Tenant::NAME_MAX_LENGTH}文字") %>
 
     <%= render FormFieldComponent.new(form: f, field_name: :user_email, label_text: "管理者メールアドレス", field_type: :email_field) %>
 
-    <%= render FormFieldComponent.new(form: f, field_name: :user_password, label_text: "管理者パスワード", field_type: :password_field) %>
+    <%= render FormFieldComponent.new(form: f, field_name: :user_password, label_text: "管理者パスワード", field_type: :password_field,
+                                      hint: "#{PasswordValidator::MIN_LENGTH}~#{PasswordValidator::MAX_LENGTH}文字") %>
 
     <%= render FormFieldComponent.new(form: f, field_name: :user_password_confirmation, label_text: "管理者パスワード確認", field_type: :password_field) %>
 

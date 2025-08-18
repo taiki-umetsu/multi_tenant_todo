@@ -83,12 +83,36 @@ body {
   font-size: 0.875rem;
 }
 
+.text-xs {
+  font-size: 0.75rem;
+}
+
 .font-medium {
   font-weight: 500;
 }
 
 .text-gray-700 {
   color: #374151;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
 }
 
 .w-full {
