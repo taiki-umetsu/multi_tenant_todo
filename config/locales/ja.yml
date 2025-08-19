@@ -1,4 +1,15 @@
 ja:
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y年%m月%d日"
+      short: "%m/%d"
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M:%S"
+      long: "%Y年%m月%d日 %H時%M分"
+      short: "%m/%d %H:%M"
+
   activerecord:
     errors:
       messages:
@@ -7,6 +18,7 @@ ja:
         too_long: "%{count}文字以内で入力してください"
         invalid: "形式が正しくありません"
         taken: "すでに存在します"
+        record_invalid: "レコードが無効です: %{errors}"
     attributes:
       tenant:
         name: "テナント名"

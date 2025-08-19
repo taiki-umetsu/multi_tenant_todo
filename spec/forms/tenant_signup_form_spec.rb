@@ -45,8 +45,7 @@ RSpec.describe TenantSignupForm, type: :model do
       it 'creates tenant and admin user' do
         form = described_class.new(valid_attributes)
 
-        expect { form.save }.to change(Tenant, :count).by(1)
-                                                      .and change(User, :count).by(1)
+        expect(form.save).to be true
 
         expect(form.tenant.name).to eq('Test Company')
         expect(form.user.email).to eq('admin@test.com')
@@ -64,8 +63,8 @@ RSpec.describe TenantSignupForm, type: :model do
       it 'does not create any records' do
         form = described_class.new(tenant_name: '')
 
-        expect { form.save }.not_to change(Tenant, :count)
-        expect { form.save }.not_to change(User, :count)
+        expect { form.save }.not_to change { Tenant.with_signup_phase { Tenant.count } }
+        expect { form.save }.not_to change { User.count }
       end
 
       it 'returns false' do

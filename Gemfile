@@ -72,4 +72,7 @@ group :test do
 
   # Code coverage analysis
   gem "simplecov", require: false
+
+  # Database cleaning for tests
+  gem "database_cleaner-active_record"
 end

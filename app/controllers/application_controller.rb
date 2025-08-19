@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
   before_action :set_variant
+  before_action :begin_tenant_transaction
+  after_action :commit_tenant_transaction
 
   private
 
@@ -55,6 +57,30 @@ class ApplicationController < ActionController::Base
   def logout_user
     session[:user_id] = nil
     session[:tenant_id] = nil
+  end
+
+  def require_admin!
+    return if current_user&.admin?
+
+    redirect_to root_path, alert: "管理者権限が必要です"
+  end
+
+  def begin_tenant_transaction
+    return unless current_user && current_tenant
+
+    # トランザクション開始とテナントコンテキスト設定
+    ActiveRecord::Base.connection.begin_transaction
+    ActiveRecord::Base.connection.execute("SET LOCAL app.current_tenant = #{ActiveRecord::Base.connection.quote(current_tenant.id)}")
+  end
+
+  def commit_tenant_transaction
+    return unless current_user && current_tenant
+
+    # トランザクション終了
+    ActiveRecord::Base.connection.commit_transaction if ActiveRecord::Base.connection.transaction_open?
+  rescue => e
+    ActiveRecord::Base.connection.rollback_transaction if ActiveRecord::Base.connection.transaction_open?
+    raise e
   end
 
   helper_method :current_user, :current_tenant, :logged_in?

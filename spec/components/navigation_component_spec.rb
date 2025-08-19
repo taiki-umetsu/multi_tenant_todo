@@ -10,12 +10,23 @@ RSpec.describe NavigationComponent, type: :component do
       expect(page).not_to have_button("ログアウト")
     end
 
-    it 'renders logged in navigation' do
-      render_preview(:logged_in)
+    it 'renders admin user navigation with user management link' do
+      render_preview(:admin_logged_in)
 
       expect(page).to have_button("ログアウト")
       expect(page).to have_content("テストテナント")
-      expect(page).to have_content("test@example.com")
+      expect(page).to have_content("admin@example.com")
+      expect(page).to have_link("ユーザー管理", href: "/admin/users")
+      expect(page).not_to have_link("ログイン")
+    end
+
+    it 'renders member user navigation without user management link' do
+      render_preview(:member_logged_in)
+
+      expect(page).to have_button("ログアウト")
+      expect(page).to have_content("テストテナント")
+      expect(page).to have_content("member@example.com")
+      expect(page).not_to have_link("ユーザー管理")
       expect(page).not_to have_link("ログイン")
     end
 

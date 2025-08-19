@@ -28,6 +28,20 @@ docker exec -it postgres-16 psql -U user -d multi_tenant_todo_development
 - テナント登録: 登録フェーズでのみ新規テナント作成可能
 - ログイン認証: メール照合によるユーザー検索を限定的に許可
 
+#### Defense in Depth（多層防御）
+RLSとアプリケーション層の両方でテナント分離を実装：
+
+```ruby
+# 推奨パターン: RLS + 明示的なwhere句
+@users = User.where(tenant_id: current_tenant.id).order(:created_at)
+```
+
+**理由：**
+1. **二重の安全策**: RLSが無効になった場合の保険
+2. **明示的な意図**: コードでテナント分離の意図が明確
+3. **パフォーマンス**: インデックスを活用した効率的なクエリ
+4. **デバッグしやすさ**: SQLログで実際のクエリが確認可能
+
 ### ViewComponent設計
 - 再利用可能なUIコンポーネントをViewComponentで実装
 - プレビューとテストを含む完全なコンポーネント開発環境
