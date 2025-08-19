@@ -36,8 +36,8 @@
         rows: @users.map do |user|
           [
             { content: user.email, type: :text },
-            { 
-              content: user.admin? ? "管理者" : "メンバー", 
+            {
+              content: user.admin? ? "管理者" : "メンバー",
               type: user.admin? ? :badge_success : :badge_info
             },
             { content: l(user.created_at.to_date, format: :long), type: :date }
