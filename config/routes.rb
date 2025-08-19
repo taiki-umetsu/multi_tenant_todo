@@ -20,4 +20,10 @@ Rails.application.routes.draw do
   # Tenant signup
   resources :tenants, only: [ :new, :create ]
   root "home#index"
+
+  # Development only routes
+  if Rails.env.development?
+    # Mount coverage reports
+    mount Rack::Files.new(Rails.root.join("coverage")), at: "/coverage"
+  end
 end
