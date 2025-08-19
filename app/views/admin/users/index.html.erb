@@ -27,54 +27,24 @@
         </div>
       </div>
 
-      <% if @users.any? %>
-        <div class="overflow-x-auto">
-          <table class="w-full max-w-4xl divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2">
-                  メールアドレス
-                </th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
-                  権限
-                </th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
-                  登録日
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <% @users.each do |user| %>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-4 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">
-                      <%= user.email %>
-                    </div>
-                  </td>
-                  <td class="px-4 py-4 whitespace-nowrap">
-                    <% if user.admin? %>
-                      <span class="inline-flex px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                        管理者
-                      </span>
-                    <% else %>
-                      <span class="inline-flex px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
-                        メンバー
-                      </span>
-                    <% end %>
-                  </td>
-                  <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <%= l(user.created_at.to_date, format: :long) %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% else %>
-        <div class="text-center py-8 text-gray-500">
-          <p>登録済みユーザーはいません</p>
-        </div>
-      <% end %>
+      <%= render(TableComponent.new(
+        headers: [
+          { label: "メールアドレス", width: "w-1/2" },
+          { label: "権限", width: "w-1/4" },
+          { label: "登録日", width: "w-1/4" }
+        ],
+        rows: @users.map do |user|
+          [
+            { content: user.email, type: :text },
+            { 
+              content: user.admin? ? "管理者" : "メンバー", 
+              type: user.admin? ? :badge_success : :badge_info
+            },
+            { content: l(user.created_at.to_date, format: :long), type: :date }
+          ]
+        end,
+        empty_message: "登録済みユーザーはいません"
+      )) %>
     </div>
   </div>
 </div>

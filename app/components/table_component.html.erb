@@ -1,0 +1,30 @@
+<% if any_rows? %>
+  <div class="overflow-x-auto">
+    <table class="w-full max-w-4xl divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <% @headers.each do |header| %>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider <%= header[:width] %>">
+              <%= header[:label] %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @rows.each do |row| %>
+          <tr class="hover:bg-gray-50">
+            <% row.each do |cell| %>
+              <td class="px-4 py-4 whitespace-nowrap <%= cell_classes(cell) %>">
+                <%= cell_content(cell) %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="text-center py-8 text-gray-500">
+    <p><%= @empty_message %></p>
+  </div>
+<% end %>
