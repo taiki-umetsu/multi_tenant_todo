@@ -47,5 +47,15 @@ class ApplicationController < ActionController::Base
     current_user.present?
   end
 
+  def login_user(user)
+    session[:user_id] = user.id
+    session[:tenant_id] = user.tenant_id
+  end
+
+  def logout_user
+    session[:user_id] = nil
+    session[:tenant_id] = nil
+  end
+
   helper_method :current_user, :current_tenant, :logged_in?
 end

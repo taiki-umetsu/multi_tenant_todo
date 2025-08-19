@@ -27,6 +27,7 @@ RSpec.describe 'テナント新規作成画面', type: :system do
       }.by(1)
 
       expect(page).to have_content 'テナント「Test Company」と管理ユーザーを作成しました'
+      expect(current_path).to eq root_path
 
       # 作成されたテナントとユーザーを検証
       tenant = Tenant.with_signup_phase { Tenant.find_by(name: 'Test Company') }
@@ -41,6 +42,11 @@ RSpec.describe 'テナント新規作成画面', type: :system do
         expect(user.role).to eq 'admin'
         expect(user.tenant).to eq tenant
       end
+
+      # 自動ログインされていることを確認
+      expect(page).to have_content 'Test Company'  # テナント名が表示される
+      expect(page).to have_content 'admin@test.com'  # ユーザーメールが表示される
+      expect(page).to have_button 'ログアウト'  # ログアウトボタンが表示される
     end
 
     it 'バリデーションエラーが表示される' do
@@ -82,6 +88,28 @@ RSpec.describe 'テナント新規作成画面', type: :system do
 
       expect(page).to have_content '形式が正しくありません'
       expect(Tenant.with_signup_phase { Tenant.count }).to eq 0
+    end
+
+    it 'テナント作成後に自動ログインされ、ログアウトできる' do
+      visit new_tenant_path
+
+      within('form') do
+        fill_in 'テナント名', with: 'Auto Login Test'
+        fill_in '管理者メールアドレス', with: 'auto@test.com'
+        fill_in '管理者パスワード', with: 'password123'
+        fill_in '管理者パスワード確認', with: 'password123'
+      end
+
+      click_button 'テナントを作成'
+
+      # 自動ログインされてルートパスにリダイレクト
+      expect(current_path).to eq root_path
+      expect(page).to have_button 'ログアウト'
+
+      # ログアウトできることを確認
+      click_button 'ログアウト'
+      expect(current_path).to eq login_path
+      expect(page).to have_content 'ログアウトしました'
     end
   end
 end

@@ -10,7 +10,9 @@ class TenantsController < ApplicationController
     @form = TenantSignupForm.new(form_params)
 
     if @form.save
-      redirect_to new_tenant_path, notice: "テナント「#{@form.tenant.name}」と管理ユーザーを作成しました"
+      # 作成されたユーザーで自動ログイン
+      login_user(@form.user)
+      redirect_to root_path, notice: "テナント「#{@form.tenant.name}」と管理ユーザーを作成しました"
     else
       render :new, status: :unprocessable_content
     end

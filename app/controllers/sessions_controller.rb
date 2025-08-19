@@ -9,8 +9,7 @@ class SessionsController < ApplicationController
     @form = LoginForm.new(login_params)
 
     if (user = @form.authenticate)
-      session[:user_id] = user.id
-      session[:tenant_id] = user.tenant_id
+      login_user(user)
       redirect_to root_path, notice: "ログインしました"
     else
       flash.now[:alert] = "テナント名、メールアドレス、またはパスワードが正しくありません"
@@ -19,8 +18,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
-    session[:tenant_id] = nil
+    logout_user
     redirect_to login_path, notice: "ログアウトしました"
   end
 
