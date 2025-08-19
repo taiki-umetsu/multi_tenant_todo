@@ -1,4 +1,4 @@
-.PHONY: db-connect db-migrate db-rollback
+.PHONY: db-connect db-migrate db-rollback tt bm rc
 
 # Connect to PostgreSQL development database
 dcnn:
@@ -11,3 +11,12 @@ dmgr:
 # Rollback database migration
 drbk:
 	bin/rails db:rollback
+
+tt:
+	bundle exec rspec
+
+bm:
+	bundle exec brakeman
+
+rc:
+	bundle exec rubocop -a

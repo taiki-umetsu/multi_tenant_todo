@@ -11,7 +11,7 @@ class User < ApplicationRecord
   class << self
     def with_tenant(tenant_id, &block)
       transaction do
-        connection.execute("SET LOCAL app.current_tenant = '#{tenant_id}'")
+        connection.execute("SET LOCAL app.current_tenant = #{connection.quote(tenant_id)}")
         yield
       end
     end
