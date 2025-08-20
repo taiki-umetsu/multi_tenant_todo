@@ -26,6 +26,9 @@ ja:
         email: "メールアドレス"
         password: "パスワード"
         role: "権限"
+      user_invitation:
+        email: "メールアドレス"
+        role: "権限"
 
   activemodel:
     errors:

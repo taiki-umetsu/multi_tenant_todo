@@ -26,7 +26,7 @@ RSpec.describe '管理者ユーザー管理画面', type: :system do
         visit admin_users_path
 
         expect(page).to have_content 'ユーザー管理'
-        expect(page).to have_content 'テナント内のユーザーの管理と招待を行います'
+        expect(page).to have_button '招待'
       end
 
       it '登録済みユーザー一覧が表示される' do

@@ -2,10 +2,11 @@ class FormFieldComponent < ViewComponent::Base
   ALLOWED_FIELD_TYPES = [
     :text_field,
     :email_field,
-    :password_field
+    :password_field,
+    :select
   ].freeze
 
-  def initialize(form:, field_name:, label_text:, field_type:, hint: nil)
+  def initialize(form:, field_name:, label_text:, field_type:, hint: nil, options: nil)
     unless ALLOWED_FIELD_TYPES.include?(field_type)
       raise ArgumentError, "field_type must be one of #{ALLOWED_FIELD_TYPES.join(', ')}"
     end
@@ -15,6 +16,7 @@ class FormFieldComponent < ViewComponent::Base
     @label_text = label_text
     @field_type = field_type
     @hint = hint
+    @options = options
   end
 
   private

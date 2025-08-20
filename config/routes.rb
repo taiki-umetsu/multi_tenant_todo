@@ -20,9 +20,13 @@ Rails.application.routes.draw do
   # Tenant signup
   resources :tenants, only: [ :new, :create ]
 
+  # User invitation acceptance
+  resources :users, only: [ :new, :create ]
+
   # Admin routes
   namespace :admin do
     resources :users, only: [ :index ]
+    resources :user_invitations, only: [ :create ]
   end
 
   root "home#index"

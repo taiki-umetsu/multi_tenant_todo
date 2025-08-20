@@ -1,0 +1,7 @@
+<% if @href %>
+  <%= button_to @text, @href, method: @method, class: css_classes, **html_options_without_class %>
+<% else %>
+  <button class="<%= css_classes %>" <%= tag.attributes(html_options_without_class) %>>
+    <%= @text %>
+  </button>
+<% end %>

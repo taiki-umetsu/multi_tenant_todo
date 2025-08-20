@@ -1,0 +1,38 @@
+<div class="max-w-md mx-auto p-6">
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="text-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">アカウント作成</h1>
+      <p class="text-gray-600">招待を受けてアカウントを作成します</p>
+    </div>
+
+    <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <div class="text-sm text-blue-800">
+        <p><strong>招待されたメールアドレス:</strong> <%= @invitation.email %></p>
+        <p><strong>権限:</strong> <%= @invitation.admin? ? "管理者" : "メンバー" %></p>
+        <p><strong>テナント:</strong> <%= @invitation.tenant.name %></p>
+      </div>
+    </div>
+
+    <%= form_with model: @user, class: "space-y-4" do |form| %>
+      <%= hidden_field_tag :token, params[:token] %>
+
+      <%= render FormFieldComponent.new(
+        form: form,
+        field_name: :password,
+        label_text: "パスワード",
+        field_type: :password_field
+      ) %>
+
+      <%= render FormFieldComponent.new(
+        form: form,
+        field_name: :password_confirmation,
+        label_text: "パスワード確認",
+        field_type: :password_field
+      ) %>
+
+      <div class="pt-4">
+        <%= render SubmitButtonComponent.new(text: "アカウント作成", disable_with: "作成中...") %>
+      </div>
+    <% end %>
+  </div>
+</div>

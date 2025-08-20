@@ -1,15 +1,61 @@
 <div class="max-w-6xl mx-auto p-6">
   <div class="bg-white rounded-lg shadow-md p-6 space-y-8">
     <!-- ページタイトル -->
-    <div>
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">ユーザー管理</h1>
-      <p class="text-gray-600">テナント内のユーザーの管理と招待を行います</p>
-    </div>
+    <div data-controller="modal">
+      <div class="flex items-center justify-between mb-2">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">ユーザー管理</h1>
+        </div>
+        <%= render ButtonComponent.new(
+          text: "招待",
+          type: :primary,
+          "data-action": "click->modal#open"
+        ) %>
+      </div>
 
-    <!-- ユーザー招待機能 -->
-    <div>
-      <h2 class="text-xl font-semibold text-gray-900 mb-4">ユーザー招待</h2>
-      <p class="text-gray-500">招待機能は実装中です</p>
+      <!-- 招待モーダル -->
+      <div id="invitation-modal"
+           class="hidden modal-overlay"
+           data-modal-target="modal"
+           data-action="click->modal#close">
+        <div class="modal-content" data-action="click->modal#stopPropagation">
+          <div class="modal-header">
+            <h3 class="modal-title">ユーザー招待</h3>
+            <button type="button"
+                    class="modal-close-btn"
+                    data-action="click->modal#close">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <div>
+            <%= form_with model: [:admin, UserInvitation.new], class: "modal-form" do |form| %>
+                <%= render FormFieldComponent.new(
+                  form: form,
+                  field_name: :email,
+                  label_text: "メールアドレス",
+                  field_type: :email_field
+                ) %>
+
+                <%= render FormFieldComponent.new(
+                  form: form,
+                  field_name: :role,
+                  label_text: "権限",
+                  field_type: :select,
+                  options: options_for_select([["メンバー", "member"], ["管理者", "admin"]], "member")
+                ) %>
+
+              <div class="modal-actions">
+                <%= render SubmitButtonComponent.new(text: "招待URLを作成", disable_with: "送信中...") %>
+              </div>
+            <% end %>
+          </div>
+
+          <div id="invitation_result"></div>
+        </div>
+      </div>
     </div>
 
     <!-- 招待中ユーザー表示 -->
