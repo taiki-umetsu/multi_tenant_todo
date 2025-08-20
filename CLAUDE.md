@@ -65,6 +65,9 @@ RLSとアプリケーション層の両方でテナント分離を実装：
 - 新しいテーブル作成時は必ずRLSポリシーも定義する
 - `spec/rls/rls_coverage_spec.rb`でRLS設定の網羅性を確認
 - テナント切り替えは`User.with_tenant`メソッドを使用
+- テスト環境でRLSポリシーを保持するには`config.active_record.schema_format = :sql`が必須
+  Rails の schema.rb は RLS の有効化やポリシーをダンプしません。
+  そのため test DB を db:schema:load で用意していると、RLS が存在しない状態になります。
 
 ### ViewComponent開発
 - 新しいコンポーネントには必ずプレビューとテストを作成

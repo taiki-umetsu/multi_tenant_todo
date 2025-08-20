@@ -1,4 +1,4 @@
-\restrict 4xxpUULad3Q2YPp0uKKK9HNbgwmrMUiIqCwJGOkyCBF4KmbAo8zqtYqEDtbC3qo
+\restrict 9yjcrVFhbZDgwvxI7zL5m9CXDa3PBKeXvj2C6TLT4F1OIPiZcddfjztXUgAhzsV
 
 -- Dumped from database version 17.6 (Debian 17.6-1.pgdg13+1)
 -- Dumped by pg_dump version 17.6
@@ -310,7 +310,7 @@ CREATE POLICY users_tenant_isolation ON public.users USING ((tenant_id = (NULLIF
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 4xxpUULad3Q2YPp0uKKK9HNbgwmrMUiIqCwJGOkyCBF4KmbAo8zqtYqEDtbC3qo
+\unrestrict 9yjcrVFhbZDgwvxI7zL5m9CXDa3PBKeXvj2C6TLT4F1OIPiZcddfjztXUgAhzsV
 
 SET search_path TO "$user", public;
 
