@@ -4,7 +4,7 @@
 ### データベース操作
 ```bash
 # PostgreSQL開発データベースに接続
-docker exec -it postgres-16 psql -U user -d multi_tenant_todo_development
+docker exec -it postgres-17 psql -U multi_tenant_app -d multi_tenant_todo_development
 ```
 
 ## アーキテクチャ概要

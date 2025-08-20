@@ -27,6 +27,10 @@ module MultiTenantTodo
     # Set default locale to Japanese
     config.i18n.default_locale = :ja
 
+    # Use SQL format for schema to preserve RLS policies
+    config.active_record.schema_format = :sql
+
+
     # Don't generate test framework files automatically
     config.generators do |g|
       g.test_framework :rspec,

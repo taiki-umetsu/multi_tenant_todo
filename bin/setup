@@ -22,7 +22,7 @@ FileUtils.chdir APP_ROOT do
 
   puts "\n== Setting up database roles =="
   puts "Creating multi_tenant_app role..."
-  system! 'docker exec postgres-16 psql -U user -d postgres -c "CREATE ROLE multi_tenant_app LOGIN PASSWORD \'password\' NOSUPERUSER CREATEDB;" || echo "Role may already exist"'
+  system! 'docker exec postgres-17 psql -U user -d postgres -c "CREATE ROLE multi_tenant_app LOGIN PASSWORD \'password\' NOSUPERUSER CREATEDB;" || echo "Role may already exist"'
 
   puts "\n== Preparing database =="
   system! "bin/rails db:prepare"

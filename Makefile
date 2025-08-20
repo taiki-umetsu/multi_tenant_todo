@@ -2,7 +2,7 @@
 
 # Connect to PostgreSQL development database
 dcnn:
-	docker exec -it postgres-16 psql -U user -d multi_tenant_todo_development
+	docker exec -it postgres-17 psql -U multi_tenant_app -d multi_tenant_todo_development
 
 # Run database migrations
 dmgr:

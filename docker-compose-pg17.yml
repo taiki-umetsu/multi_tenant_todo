@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  db17:
+    image: postgres:17
+    container_name: postgres-17
+    ports:
+      - "5556:5432"
+    environment:
+      POSTGRES_USER: multi_tenant_app
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: multi_tenant_todo_development
+    volumes:
+      - pgdata17:/var/lib/postgresql/data
+volumes:
+  pgdata17:

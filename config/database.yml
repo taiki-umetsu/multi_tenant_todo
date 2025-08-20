@@ -24,7 +24,7 @@ development:
   <<: *default
   database: multi_tenant_todo_development
   host: localhost
-  port: 5555
+  port: 5556
   username: multi_tenant_app
   password: password
 
@@ -62,7 +62,7 @@ test:
   <<: *default
   database: multi_tenant_todo_test
   host: localhost
-  port: 5555
+  port: 5556
   username: multi_tenant_app
   password: password
 

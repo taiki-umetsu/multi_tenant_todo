@@ -1,2 +1,12 @@
-#!/usr/bin/env ruby
-exec "./bin/rails", "server", *ARGV
+#!/usr/bin/env bash
+
+# Start PostgreSQL 17 container if not running
+if ! docker ps | grep -q postgres-17; then
+  echo "Starting PostgreSQL 17 container..."
+  docker-compose -f docker-compose-pg17.yml up -d
+  echo "Waiting for PostgreSQL to be ready..."
+  sleep 3
+fi
+
+# Start Rails server
+exec ./bin/rails server "$@"
