@@ -17,6 +17,8 @@ class TableComponent < ViewComponent::Base
       content_tag(:span, cell[:content], class: "inline-flex px-2 py-1 text-xs rounded-full bg-green-100 text-green-800")
     when :badge_info
       content_tag(:span, cell[:content], class: "inline-flex px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800")
+    when :badge_yellow
+      content_tag(:span, cell[:content], class: "inline-flex px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800")
     when :date
       content_tag(:span, cell[:content], class: "text-sm text-gray-500")
     when :custom

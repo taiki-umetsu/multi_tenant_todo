@@ -3,5 +3,7 @@ class Admin::UsersController < ApplicationController
 
   def index
     @users = User.where(tenant_id: current_tenant.id).order(:created_at)
+    @invitations = UserInvitation.where(tenant_id: current_tenant.id)
+                                 .order(created_at: :desc)
   end
 end

@@ -60,8 +60,60 @@
 
     <!-- 招待中ユーザー表示 -->
     <div>
-      <h2 class="text-xl font-semibold text-gray-900 mb-4">招待中のユーザー</h2>
-      <p class="text-gray-500">招待状況の表示機能は実装中です</p>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-semibold text-gray-900">招待中のユーザー</h2>
+        <div class="text-sm text-gray-500">
+          <%= @invitations.count %>件
+        </div>
+      </div>
+
+      <% if @invitations.any? %>
+        <%= render(TableComponent.new(
+          headers: [
+            { label: "メールアドレス", width: "w-1/4" },
+            { label: "権限", width: "w-1/6" },
+            { label: "招待日", width: "w-1/6" },
+            { label: "ステータス", width: "w-1/6" },
+            { label: "招待URL", width: "w-1/4" }
+          ],
+          rows: @invitations.map do |invitation|
+            invitation_url = new_user_url(token: invitation.token)
+            [
+              { content: invitation.email, type: :text },
+              {
+                content: invitation.admin? ? "管理者" : "メンバー",
+                type: invitation.admin? ? :badge_success : :badge_info
+              },
+              { content: l(invitation.created_at.to_date, format: :long), type: :date },
+              {
+                content: invitation.expired? ? "期限切れ" : "有効",
+                type: invitation.expired? ? :badge_yellow : :badge_success
+              },
+              {
+                content: content_tag(:div,
+                  render(ButtonComponent.new(
+                    text: "URLをコピー",
+                    type: :secondary,
+                    data: {
+                      clipboard_target: "button",
+                      action: "click->clipboard#copy"
+                    }
+                  )),
+                  data: {
+                    controller: "clipboard",
+                    clipboard_text_value: invitation_url
+                  }
+                )
+              }
+            ]
+          end,
+          empty_message: "招待中のユーザーはいません"
+        )) %>
+      <% else %>
+        <div class="text-center py-8 text-gray-500">
+          招待中のユーザーはいません
+        </div>
+      <% end %>
     </div>
 
     <!-- ユーザー一覧表示 -->
@@ -69,7 +121,7 @@
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-semibold text-gray-900">登録済みユーザー</h2>
         <div class="text-sm text-gray-500">
-          <%= @users.count %>名のユーザー
+          <%= @users.count %>件
         </div>
       </div>
 
