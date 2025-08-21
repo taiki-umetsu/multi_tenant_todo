@@ -1,0 +1,9 @@
+<% if @is_header %>
+  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider <%= @width %>">
+    <%= formatted_body %>
+  </th>
+<% else %>
+  <td class="px-4 py-4 whitespace-nowrap <%= wrapper_class %>">
+    <%= formatted_body %>
+  </td>
+<% end %>

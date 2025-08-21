@@ -62,58 +62,29 @@
     <div>
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-semibold text-gray-900">招待中のユーザー</h2>
-        <div class="text-sm text-gray-500">
+        <div class="text-sm text-gray-500" id="invitation_count">
           <%= @invitations.count %>件
         </div>
       </div>
 
-      <% if @invitations.any? %>
-        <%= render(TableComponent.new(
-          headers: [
-            { label: "メールアドレス", width: "w-1/4" },
-            { label: "権限", width: "w-1/6" },
-            { label: "招待日", width: "w-1/6" },
-            { label: "ステータス", width: "w-1/6" },
-            { label: "招待URL", width: "w-1/4" }
-          ],
-          rows: @invitations.map do |invitation|
-            invitation_url = new_user_url(token: invitation.token)
-            [
-              { content: invitation.email, type: :text },
-              {
-                content: invitation.admin? ? "管理者" : "メンバー",
-                type: invitation.admin? ? :badge_success : :badge_info
-              },
-              { content: l(invitation.created_at.to_date, format: :long), type: :date },
-              {
-                content: invitation.expired? ? "期限切れ" : "有効",
-                type: invitation.expired? ? :badge_yellow : :badge_success
-              },
-              {
-                content: content_tag(:div,
-                  render(ButtonComponent.new(
-                    text: "URLをコピー",
-                    type: :secondary,
-                    data: {
-                      clipboard_target: "button",
-                      action: "click->clipboard#copy"
-                    }
-                  )),
-                  data: {
-                    controller: "clipboard",
-                    clipboard_text_value: invitation_url
-                  }
-                )
-              }
-            ]
-          end,
-          empty_message: "招待中のユーザーはいません"
-        )) %>
-      <% else %>
-        <div class="text-center py-8 text-gray-500">
-          招待中のユーザーはいません
-        </div>
-      <% end %>
+      <div id="invitation_table" data-turbo-temporary>
+        <%= render TableComponent.new(empty_message: "招待中のユーザーはいません", tbody_id: "invitation_tbody") do |table| %>
+          <% table.with_header do |header| %>
+            <% header.with_cell(body: "メールアドレス", is_header: true, width: "w-1/4") %>
+            <% header.with_cell(body: "権限", is_header: true, width: "w-1/6") %>
+            <% header.with_cell(body: "招待日", is_header: true, width: "w-1/6") %>
+            <% header.with_cell(body: "ステータス", is_header: true, width: "w-1/6") %>
+            <% header.with_cell(body: "招待URL", is_header: true, width: "w-1/4") %>
+          <% end %>
+          <% @invitations.each do |invitation| %>
+            <% table.with_row do |row| %>
+              <% invitation.to_table_row.each do |cell_data| %>
+                <% row.with_cell(**cell_data) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
 
     <!-- ユーザー一覧表示 -->
@@ -125,24 +96,23 @@
         </div>
       </div>
 
-      <%= render(TableComponent.new(
-        headers: [
-          { label: "メールアドレス", width: "w-1/2" },
-          { label: "権限", width: "w-1/4" },
-          { label: "登録日", width: "w-1/4" }
-        ],
-        rows: @users.map do |user|
-          [
-            { content: user.email, type: :text },
-            {
-              content: user.admin? ? "管理者" : "メンバー",
+      <%= render TableComponent.new(empty_message: "登録済みユーザーはいません") do |table| %>
+        <% table.with_header do |header| %>
+          <% header.with_cell(body: "メールアドレス", is_header: true, width: "w-1/2") %>
+          <% header.with_cell(body: "権限", is_header: true, width: "w-1/4") %>
+          <% header.with_cell(body: "登録日", is_header: true, width: "w-1/4") %>
+        <% end %>
+        <% @users.each do |user| %>
+          <% table.with_row do |row| %>
+            <% row.with_cell(body: user.email, type: :text) %>
+            <% row.with_cell(
+              body: user.admin? ? "管理者" : "メンバー",
               type: user.admin? ? :badge_success : :badge_info
-            },
-            { content: l(user.created_at.to_date, format: :long), type: :date }
-          ]
-        end,
-        empty_message: "登録済みユーザーはいません"
-      )) %>
+            ) %>
+            <% row.with_cell(body: l(user.created_at.to_date, format: :long), type: :date) %>
+          <% end %>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>

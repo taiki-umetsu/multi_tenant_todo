@@ -92,6 +92,16 @@ end
 bundle exec rspec spec/system/admin/user_invitations_spec.rb:36
 ```
 
+### Turbo Streams開発
+- Turbo Streamsで動的に更新される要素は、ページリロード時にキャッシュの影響で古い状態が表示される場合がある
+- 解決方法：更新対象の要素に`data-turbo-temporary`属性を追加してキャッシュから除外する
+
+```erb
+<div id="dynamic_content" data-turbo-temporary>
+  <!-- Turbo Streamsで更新される内容 -->
+</div>
+```
+
 ### コミット前の必須チェック
 コミット前には必ず以下のコマンドを実行してエラーがないことを確認する：
 

@@ -33,6 +33,9 @@ RSpec.describe 'ユーザー招待システム', type: :system do
       end
 
       it 'メンバーとして招待できる', js: true do
+        # 初期状態の招待件数を確認
+        initial_count = page.find('#invitation_count').text
+
         click_button '招待'
 
         within('#invitation-modal') do
@@ -46,6 +49,18 @@ RSpec.describe 'ユーザー招待システム', type: :system do
         within('#invitation_result') do
           expect(page).to have_content('招待URLが生成されました')
         end
+
+        # Turbo Streamでテーブルに新しい行が追加されることを確認
+        within('#invitation_table') do
+          expect(page).to have_content('newuser@example.com')
+          expect(page).to have_content('メンバー')
+          expect(page).to have_button('URLをコピー')
+        end
+
+        # 招待件数が更新されることを確認
+        updated_count = page.find('#invitation_count').text
+        expect(updated_count).not_to eq(initial_count)
+        expect(updated_count).to match(/\d+件/)
       end
 
       it 'URLをコピーボタンが機能する', js: true do
@@ -82,12 +97,57 @@ RSpec.describe 'ユーザー招待システム', type: :system do
         # Turbo Streamで成功メッセージが表示されることを確認
         expect(page).to have_css('#invitation_result .bg-green-50')
 
+        # Turbo Streamでテーブルに新しい行が追加されることを確認
+        within('#invitation_table') do
+          expect(page).to have_content('admin@example.com')
+          expect(page).to have_content('管理者')
+          expect(page).to have_button('URLをコピー')
+        end
+
         # 招待が作成されたことを確認
         User.with_tenant(tenant.id) do
           invitation = UserInvitation.find_by(email: 'admin@example.com')
           expect(invitation).to be_present
           expect(invitation.role).to eq('admin')
         end
+      end
+
+      it '複数の招待を連続して作成できる', js: true do
+        # 1つ目の招待を作成
+        click_button '招待'
+        within('#invitation-modal') do
+          fill_in 'メールアドレス', with: 'user1@example.com'
+          select 'メンバー', from: '権限'
+          click_button '招待URLを作成'
+        end
+
+        # 1つ目の招待がテーブルに追加されることを確認
+        within('#invitation_table') do
+          expect(page).to have_content('user1@example.com')
+        end
+
+        # 2つ目の招待を作成（モーダルを閉じて再度開く）
+        find('.modal-close-btn').click
+        click_button '招待'
+        within('#invitation-modal') do
+          fill_in 'メールアドレス', with: 'user2@example.com'
+          select '管理者', from: '権限'
+          click_button '招待URLを作成'
+        end
+
+        # 両方の招待がテーブルに存在することを確認
+        within('#invitation_table') do
+          expect(page).to have_content('user1@example.com')
+          expect(page).to have_content('user2@example.com')
+          expect(page).to have_content('メンバー')
+          expect(page).to have_content('管理者')
+
+          # URLをコピーボタンが2つあることを確認
+          expect(page).to have_button('URLをコピー', count: 2)
+        end
+
+        # 招待件数が正しく更新されることを確認
+        expect(page.find('#invitation_count').text).to eq('2件')
       end
     end
 

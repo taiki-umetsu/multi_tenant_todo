@@ -12,7 +12,7 @@
         <%= render ButtonComponent.new(
           text: "URLをコピー",
           type: :secondary,
-          data: { 
+          data: {
             clipboard_target: "button",
             action: "click->clipboard#copy"
           }
@@ -20,7 +20,18 @@
       </div>
     </div>
   <% end %>
-  <%#= TODO: 招待済みユーザーの追加 %>
+
+  <%= turbo_stream.prepend "invitation_tbody" do %>
+    <%= render TableRowComponent.new do |row| %>
+      <% @invitation.to_table_row.each do |cell_data| %>
+        <% row.with_cell(**cell_data) %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= turbo_stream.update "invitation_count" do %>
+    <%= @invitation_count %>件
+  <% end %>
 <% else %>
   <%= turbo_stream.update "invitation_result" do %>
     <div class="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">

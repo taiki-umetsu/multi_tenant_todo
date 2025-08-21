@@ -45,7 +45,6 @@ class UsersController < ApplicationController
 
   def validate_invitation
     if @invitation.expired?
-      @invitation.destroy
       redirect_to root_path, alert: "\u62DB\u5F85URL\u306E\u6709\u52B9\u671F\u9650\u304C\u5207\u308C\u3066\u3044\u307E\u3059\u3002"
     end
   end

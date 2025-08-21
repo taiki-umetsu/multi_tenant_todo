@@ -28,7 +28,9 @@ RSpec.describe TableComponent, type: :component do
       render_preview(:empty_state)
 
       expect(page).to have_content("データがありません")
-      expect(page).not_to have_css("table")
+      expect(page).to have_css("table")
+      expect(page).to have_css("thead")
+      expect(page).to have_css("tbody")
     end
 
     it 'renders empty state with custom message' do
@@ -36,7 +38,9 @@ RSpec.describe TableComponent, type: :component do
 
       expect(page).to have_content("ユーザーが見つかりません")
       expect(page).not_to have_content("データがありません")
-      expect(page).not_to have_css("table")
+      expect(page).to have_css("table")
+      expect(page).to have_css("thead")
+      expect(page).to have_css("tbody")
     end
   end
 end

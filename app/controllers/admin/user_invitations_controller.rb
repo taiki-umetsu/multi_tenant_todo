@@ -6,6 +6,7 @@ class Admin::UserInvitationsController < ApplicationController
     @invitation.tenant = current_tenant
 
     if @invitation.save
+      @invitation_count = UserInvitation.where(tenant_id: current_tenant.id).count
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to admin_users_path, notice: "招待URLを作成しました" }
