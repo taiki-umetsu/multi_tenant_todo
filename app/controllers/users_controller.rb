@@ -40,12 +40,12 @@ class UsersController < ApplicationController
     # RLSでテナントが参照できないので、サインアップフェーズで明示的に取得
     @invitation.tenant = Tenant.with_signup_phase { Tenant.find(@invitation.tenant_id) }
   rescue ActiveRecord::RecordNotFound
-    redirect_to root_path, alert: "\u7121\u52B9\u306A\u62DB\u5F85URL\u3067\u3059\u3002"
+    redirect_to root_path, alert: "無効な招待URLです。"
   end
 
   def validate_invitation
     if @invitation.expired?
-      redirect_to root_path, alert: "\u62DB\u5F85URL\u306E\u6709\u52B9\u671F\u9650\u304C\u5207\u308C\u3066\u3044\u307E\u3059\u3002"
+      redirect_to root_path, alert: "招待URLの有効期限が切れています。"
     end
   end
 
