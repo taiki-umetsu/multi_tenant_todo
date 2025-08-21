@@ -102,6 +102,42 @@ bundle exec rspec spec/system/admin/user_invitations_spec.rb:36
 </div>
 ```
 
+### PostgreSQLデッドロック対策
+- ユニーク制約のあるテーブルへの同時INSERT処理でデッドロックが発生する場合がある
+- 特に決定論的暗号化を使用したemailフィールドなどで発生しやすい
+- **主な原因**: ApplicationControllerでの手動トランザクション管理（before_action/after_action）
+- **解決策**: `around_action`を使用して適切にトランザクションを管理
+
+```ruby
+around_action :with_tenant_transaction
+
+private
+
+def with_tenant_transaction
+  return yield unless current_user && current_tenant
+
+  ActiveRecord::Base.transaction do
+    conn = ActiveRecord::Base.connection
+    quoted = conn.quote(current_tenant.id)
+    conn.execute("SET LOCAL app.current_tenant = #{quoted}")
+    yield
+  end
+end
+```
+
+- デッドロック発生時の緊急対処法：
+
+```bash
+# アクティブな接続とロック状況を確認
+docker exec postgres-17 psql -U multi_tenant_app -d multi_tenant_todo_development -c "
+SELECT pid, usename, state, query_start, query FROM pg_stat_activity
+WHERE state != 'idle' AND usename = 'multi_tenant_app';"
+
+# ロックされたプロセスを強制終了
+docker exec postgres-17 psql -U multi_tenant_app -d multi_tenant_todo_development -c "
+SELECT pg_terminate_backend(PID番号);"
+```
+
 ### コミット前の必須チェック
 コミット前には必ず以下のコマンドを実行してエラーがないことを確認する：
 
