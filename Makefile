@@ -1,4 +1,4 @@
-.PHONY: db-connect db-migrate db-rollback tt bm rc pg17-remove pg17-start pg17-stop
+.PHONY: db-connect db-migrate db-rollback tt bm rc precommit pg17-remove pg17-start pg17-stop
 
 # Connect to PostgreSQL development database
 dcnn:
@@ -20,6 +20,17 @@ bm:
 
 rc:
 	bundle exec rubocop -a
+
+# コミット前のチェック（rubocop自動修正 + brakeman + test）
+precommit:
+	@echo "Running pre-commit checks..."
+	@echo "1. Running RuboCop with auto-correct..."
+	bundle exec rubocop -a
+	@echo "2. Running Brakeman security scan..."
+	bundle exec brakeman
+	@echo "3. Running tests..."
+	bundle exec rspec
+	@echo "All checks passed! Ready to commit."
 
 # PostgreSQL 17 コンテナを停止、削除、ボリュームを削除
 pg17-remove:

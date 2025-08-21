@@ -80,7 +80,7 @@ RSpec.describe 'ユーザー招待システム', type: :system do
         end
 
         # Turbo Streamで成功メッセージが表示されることを確認
-        expect(page).to have_css('#invitation_result .bg-green-50', wait: 10)
+        expect(page).to have_css('#invitation_result .bg-green-50')
 
         # 招待が作成されたことを確認
         User.with_tenant(tenant.id) do

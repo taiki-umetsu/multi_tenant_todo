@@ -77,17 +77,34 @@ RLSとアプリケーション層の両方でテナント分離を実装：
 ### セキュリティ
 - 認証・認可の実装では必ずRLSポリシーを考慮
 
+### JavaScriptを含むシステムテスト（`js: true`）をデバッグ
+ヘッドレスモードを無効にして実際のブラウザで動作を確認：
+
+```ruby
+before do
+  driven_by(:selenium)  # ヘッドレスではなく実際のブラウザを使用
+end
+```
+
+通常のテストでは`driven_by(:selenium_headless)`を使用してパフォーマンスを向上させる。
+また、デバック時は単体のテストケースを指定して実行すると良い。
+```bash
+bundle exec rspec spec/system/admin/user_invitations_spec.rb:36
+```
+
 ### コミット前の必須チェック
 コミット前には必ず以下のコマンドを実行してエラーがないことを確認する：
 
 ```bash
-# コードスタイルチェック
-bundle exec rubocop
+make precommit
+```
 
-# セキュリティ脆弱性スキャン
-bundle exec brakeman
+このコマンドはRuboCop自動修正、Brakeman、テストを一括実行する。
 
+```bash
 # SimpleCovによるコードカバレッジレポート
 # テスト実行後、coverage/index.htmlでレポートを確認
 ```
+
 問題がないことを確認してからコミットすること。
+
