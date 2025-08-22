@@ -6,7 +6,11 @@ class Admin::UserInvitationsController < ApplicationController
     @invitation.tenant = current_tenant
 
     if @invitation.save
-      @invitation_count = UserInvitation.where(tenant_id: current_tenant.id).count
+      # 招待成功時は1ページ目の招待データを取得
+      @invitations = UserInvitation.where(tenant_id: current_tenant.id)
+                                   .order(created_at: :desc)
+                                   .page(1)
+                                   .per(Admin::UsersController::INVITATIONS_PER_PAGE)
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to admin_users_path, notice: "招待URLを作成しました" }

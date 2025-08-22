@@ -21,16 +21,8 @@
     </div>
   <% end %>
 
-  <%= turbo_stream.prepend "invitation_tbody" do %>
-    <%= render TableRowComponent.new do |row| %>
-      <% @invitation.to_table_row.each do |cell_data| %>
-        <% row.with_cell(**cell_data) %>
-      <% end %>
-    <% end %>
-  <% end %>
-
-  <%= turbo_stream.update "invitation_count" do %>
-    <%= @invitation_count %>件
+  <%= turbo_stream.update "invitations_section" do %>
+    <%= render InvitationsListComponent.new(invitations: @invitations) %>
   <% end %>
 <% else %>
   <%= turbo_stream.update "invitation_result" do %>

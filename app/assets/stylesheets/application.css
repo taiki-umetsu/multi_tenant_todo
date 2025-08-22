@@ -650,3 +650,76 @@ input[type="submit"]:focus {
 .text-orange-800 {
   color: #9a3412;
 }
+
+/* Pagination styles */
+.pagination-current {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #e5e7eb;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.pagination-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+/* Mobile pagination styles */
+@media (max-width: 768px) {
+  .pagination-current {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+  }
+  
+  .pagination-link {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+  }
+}
+
+.pagination-link:hover {
+  background-color: #f9fafb;
+}
+
+.space-x-3 > * + * {
+  margin-left: 0.75rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+/* Mobile pagination styles */
+.gap-4 {
+  gap: 1rem;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.space-x-1 > * + * {
+  margin-left: 0.25rem;
+}

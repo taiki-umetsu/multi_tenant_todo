@@ -59,32 +59,8 @@
     </div>
 
     <!-- 招待中ユーザー表示 -->
-    <div>
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-semibold text-gray-900">招待中のユーザー</h2>
-        <div class="text-sm text-gray-500" id="invitation_count">
-          <%= @invitations.count %>件
-        </div>
-      </div>
-
-      <div id="invitation_table" data-turbo-temporary>
-        <%= render TableComponent.new(empty_message: "招待中のユーザーはいません", tbody_id: "invitation_tbody") do |table| %>
-          <% table.with_header do |header| %>
-            <% header.with_cell(body: "メールアドレス", is_header: true, width: "w-1/4") %>
-            <% header.with_cell(body: "権限", is_header: true, width: "w-1/6") %>
-            <% header.with_cell(body: "招待日", is_header: true, width: "w-1/6") %>
-            <% header.with_cell(body: "ステータス", is_header: true, width: "w-1/6") %>
-            <% header.with_cell(body: "招待URL", is_header: true, width: "w-1/4") %>
-          <% end %>
-          <% @invitations.each do |invitation| %>
-            <% table.with_row do |row| %>
-              <% invitation.to_table_row.each do |cell_data| %>
-                <% row.with_cell(**cell_data) %>
-              <% end %>
-            <% end %>
-          <% end %>
-        <% end %>
-      </div>
+    <div id="invitations_section">
+      <%= render InvitationsListComponent.new(invitations: @invitations) %>
     </div>
 
     <!-- ユーザー一覧表示 -->

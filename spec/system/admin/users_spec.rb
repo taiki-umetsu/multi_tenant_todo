@@ -140,7 +140,6 @@ RSpec.describe '管理者ユーザー管理画面', type: :system do
         visit admin_users_path
 
         expect(page).to have_content '招待中のユーザー'
-        expect(page).to have_content '2件'
 
         # テーブルヘッダーの確認
         expect(page).to have_content 'メールアドレス'
@@ -201,8 +200,66 @@ RSpec.describe '管理者ユーザー管理画面', type: :system do
         visit admin_users_path
 
         expect(page).to have_content '招待中のユーザー'
-        expect(page).to have_content '0件'
         expect(page).to have_content '招待中のユーザーはいません'
+      end
+    end
+
+    context 'ページネーション' do
+      let(:paginated_tenant) { create(:tenant) }
+      let(:paginated_admin) { create(:user, :admin, tenant: paginated_tenant) }
+
+      before do
+        # 15件の招待を作成（1ページ10件なので2ページになる）
+        User.with_tenant(paginated_tenant.id) do
+          15.times do |i|
+            create(:user_invitation, 
+                   tenant: paginated_tenant, 
+                   email: "user#{i}@example.com", 
+                   role: 'member')
+          end
+        end
+
+        # 管理者でログイン
+        visit login_path
+        within('form') do
+          fill_in 'テナント名', with: paginated_tenant.name
+          fill_in 'メールアドレス', with: paginated_admin.email
+          fill_in 'パスワード', with: 'password123'
+          click_button 'ログイン'
+        end
+      end
+
+      it '1ページ目に10件表示される' do
+        visit admin_users_path
+
+        expect(page).to have_content '1 - 10 / 15件'
+        
+        # 1ページに10件表示されることを確認（降順なので最新から）
+        expect(page).to have_content 'user14@example.com'
+        expect(page).to have_content 'user5@example.com'
+        expect(page).not_to have_content 'user4@example.com'
+      end
+
+      it 'ページネーションリンクが表示される' do
+        visit admin_users_path
+
+        expect(page).to have_selector('nav[aria-label="Pagination"]')
+        expect(page).to have_link '2'
+      end
+
+      it '2ページ目に残りの5件が表示される' do
+        visit admin_users_path(page: 2)
+
+        expect(page).to have_content '11 - 15 / 15件'
+        expect(page).to have_content 'user4@example.com'
+        expect(page).to have_content 'user0@example.com'
+        expect(page).not_to have_content 'user5@example.com'
+      end
+
+      it 'ページ情報が表示される' do
+        visit admin_users_path
+
+        expect(page).to have_content '1 - 10 / 15件'
       end
     end
   end

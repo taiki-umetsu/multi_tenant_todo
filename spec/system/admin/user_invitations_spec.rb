@@ -33,9 +33,6 @@ RSpec.describe 'ユーザー招待システム', type: :system do
       end
 
       it 'メンバーとして招待できる', js: true do
-        # 初期状態の招待件数を確認
-        initial_count = page.find('#invitation_count').text
-
         click_button '招待'
 
         within('#invitation-modal') do
@@ -57,10 +54,8 @@ RSpec.describe 'ユーザー招待システム', type: :system do
           expect(page).to have_button('URLをコピー')
         end
 
-        # 招待件数が更新されることを確認
-        updated_count = page.find('#invitation_count').text
-        expect(updated_count).not_to eq(initial_count)
-        expect(updated_count).to match(/\d+件/)
+        # 招待が作成されたことを確認（1件の場合はページネーションは表示されない）
+        expect(page).to have_content('newuser@example.com')
       end
 
       it 'URLをコピーボタンが機能する', js: true do
@@ -146,8 +141,9 @@ RSpec.describe 'ユーザー招待システム', type: :system do
           expect(page).to have_button('URLをコピー', count: 2)
         end
 
-        # 招待件数が正しく更新されることを確認
-        expect(page.find('#invitation_count').text).to eq('2件')
+        # 招待が正しく作成されたことを確認
+        expect(page).to have_content('user1@example.com')
+        expect(page).to have_content('user2@example.com')
       end
     end
 
