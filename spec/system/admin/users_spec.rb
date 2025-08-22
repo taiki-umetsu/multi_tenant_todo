@@ -212,9 +212,9 @@ RSpec.describe '管理者ユーザー管理画面', type: :system do
         # 15件の招待を作成（1ページ10件なので2ページになる）
         User.with_tenant(paginated_tenant.id) do
           15.times do |i|
-            create(:user_invitation, 
-                   tenant: paginated_tenant, 
-                   email: "user#{i}@example.com", 
+            create(:user_invitation,
+                   tenant: paginated_tenant,
+                   email: "user#{i}@example.com",
                    role: 'member')
           end
         end
@@ -233,7 +233,7 @@ RSpec.describe '管理者ユーザー管理画面', type: :system do
         visit admin_users_path
 
         expect(page).to have_content '1 - 10 / 15件'
-        
+
         # 1ページに10件表示されることを確認（降順なので最新から）
         expect(page).to have_content 'user14@example.com'
         expect(page).to have_content 'user5@example.com'

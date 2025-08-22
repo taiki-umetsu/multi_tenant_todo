@@ -59,9 +59,9 @@
     </div>
 
     <!-- 招待中ユーザー表示 -->
-    <div id="invitations_section">
+    <%= turbo_frame_tag "invitations_section" do %>
       <%= render InvitationsListComponent.new(invitations: @invitations) %>
-    </div>
+    <% end %>
 
     <!-- ユーザー一覧表示 -->
     <div>
